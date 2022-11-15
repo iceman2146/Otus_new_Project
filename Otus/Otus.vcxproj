@@ -28,6 +28,7 @@
     <ClCompile Include="src\ThirdParty\Imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\ThirdParty\Imgui\imgui_tables.cpp" />
     <ClCompile Include="src\ThirdParty\Imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\ThirdParty\Imgui\Project\Application_mod.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ThirdParty\Imgui\Extension\image_combine.h" />
@@ -42,6 +43,7 @@
     <ClInclude Include="src\ThirdParty\Imgui\imstb_truetype.h" />
     <ClInclude Include="src\ThirdParty\Imgui\libs\glfw\include\GLFW\glfw3.h" />
     <ClInclude Include="src\ThirdParty\Imgui\libs\glfw\include\GLFW\glfw3native.h" />
+    <ClInclude Include="src\ThirdParty\Imgui\Project\Application_mod.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="src\ThirdParty\Imgui\libs\glfw\lib-vc2010-64\glfw3.lib" />
@@ -109,7 +111,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\icema\source\repos\Otus\Otus\src\ThirdParty\Imgui\Extension\;C:\Users\icema\source\repos\Otus\Otus\src\ThirdParty\Imgui\Extension\TextureInspection\;C:\Users\icema\source\repos\Otus\Otus\src\ThirdParty\Imgui\Extension\TextureInspection\backends;C:\Users\icema\source\repos\Otus\Otus\src\ThirdParty\Imgui;C:\OpenCV\Prebuilt\opencv\build\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\icema\source\repos\Otus\Otus\src\ThirdParty\Imgui\Extension\;C:\Users\icema\source\repos\Otus\Otus\src\ThirdParty\Imgui\Extension\TextureInspection\;C:\Users\icema\source\repos\Otus\Otus\src\ThirdParty\Imgui\Extension\TextureInspection\backends;C:\Users\icema\source\repos\Otus\Otus\src\ThirdParty\Imgui;C:\OpenCV\Prebuilt\opencv\build\include;C:\Users\icema\source\repos\Otus\Otus\src\ThirdParty\Imgui\Project;$(IncludePath)</IncludePath>
     <LibraryPath>C:\OpenCV\Prebuilt\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

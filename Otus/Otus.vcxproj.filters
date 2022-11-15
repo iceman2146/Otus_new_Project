@@ -42,6 +42,9 @@
     <ClCompile Include="src\ThirdParty\Imgui\Extension\image_combine.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\ThirdParty\Imgui\Project\Application_mod.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ThirdParty\Imgui\imconfig.h">
@@ -78,6 +81,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\ThirdParty\Imgui\Extension\image_combine.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ThirdParty\Imgui\Project\Application_mod.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
