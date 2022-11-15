@@ -39,6 +39,9 @@
     <ClCompile Include="src\ThirdParty\Imgui\imgui_widgets.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\ThirdParty\Imgui\Extension\image_combine.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ThirdParty\Imgui\imconfig.h">
@@ -72,6 +75,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\ThirdParty\Imgui\imgui_impl_opengl3_loader.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ThirdParty\Imgui\Extension\image_combine.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

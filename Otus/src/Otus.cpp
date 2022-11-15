@@ -1,27 +1,5 @@
 ﻿
-//#include <iostream>
-//
-//using namespace cv;
-//using namespace std;
-//
-//int main(int argc, char** argv)
-//{
-//    // Read the image file
-//    Mat image = imread("Image Address Here ");
-//    // Check for failure
-//    if (image.empty())
-//    {
-//        cout << "Image Not Found!!!" << endl;
-//        cin.get(); //wait for any key press
-//        return -1;
-//    }
-//    // Show our image inside a window.
-//    imshow("Image Window Name here", image);
-//
-//    // Wait for any keystroke in the window
-//    waitKey(0);
-//    return 0;
-//}
+
 
 // Dear ImGui: standalone example application for GLFW + OpenGL 3, using programmable pipeline
 // (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context creation, etc.)
@@ -34,6 +12,7 @@
 #include <stdio.h>
 
 #include <opencv2/opencv.hpp>
+#include "image_combine.h"
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
@@ -54,9 +33,14 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int, char**)
 {
-    cv::Mat image = cv::imread("C://test.jpg");
-    cv::cvtColor(image, image, cv::COLOR_BGR2RGBA);
-    //cv::imshow("image",image);
+    cv::Mat RGB_image = cv::imread("C://RGB.jpg");
+    cv::cvtColor(RGB_image, RGB_image,cv::COLOR_BGR2RGBA);
+    cv::Mat Alpha_image = cv::imread("C://OnlyAlpha1.png");
+    cv::cvtColor(Alpha_image, Alpha_image, cv::COLOR_BGR2RGBA);
+    cv::Mat RGBA_image;
+    GetSomeImages_andMerge(RGB_image, Alpha_image, RGBA_image);
+    //cv::cvtColor(image, image, cv::COLOR_BGR2RGBA);
+    
 
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
@@ -98,7 +82,6 @@ int main(int, char**)
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
     //io.ConfigViewportsNoAutoMerge = true;
@@ -141,6 +124,28 @@ int main(int, char**)
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+    //!!!!!!
+    GLuint texture_rgb;
+    glGenTextures(1, &texture_rgb);
+    glBindTexture(GL_TEXTURE_2D, texture_rgb);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, RGB_image.cols, RGB_image.rows, 0, GL_RGBA, GL_UNSIGNED_BYTE, RGB_image.data);
+    GLuint texture_alpha;
+    glGenTextures(1, &texture_alpha);
+    glBindTexture(GL_TEXTURE_2D, texture_alpha);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Alpha_image.cols, Alpha_image.rows, 0, GL_RGBA, GL_UNSIGNED_BYTE, Alpha_image.data);
+    GLuint texture_RGBA;
+    glGenTextures(1, &texture_RGBA);
+    glBindTexture(GL_TEXTURE_2D, texture_RGBA);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, RGBA_image.cols, RGBA_image.rows, 0, GL_RGBA, GL_UNSIGNED_BYTE, RGBA_image.data);
     // Main loop
     while (!glfwWindowShouldClose(window))
     {
@@ -162,20 +167,36 @@ int main(int, char**)
         ///
          
 
-        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+        
+        ImGui::Begin("RG_B",0, ImGuiWindowFlags_MenuBar);                          // Create a window called "Hello, world!" and append into it.
+        if (ImGui::BeginMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                if (ImGui::MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
+                if (ImGui::MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
+                if (ImGui::MenuItem("Close", "Ctrl+W")) { /*my_tool_active = false; */ }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenuBar();
+        }
 
-        GLuint texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.cols, image.rows, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data);
-        ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(texture)), ImVec2(image.cols, image.rows));
+        ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(texture_rgb)), ImVec2(RGB_image.cols, RGB_image.rows));
+        ImGui::End();
 
+        ImGui::Begin("Alpha");                          // Create a window called "Hello, world!" and append into it.
+       
+        ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(texture_alpha)), ImVec2(Alpha_image.cols, Alpha_image.rows));
+        ImGui::End();
+
+        ImGui::Begin("RGBA");                          // Create a window called "Hello, world!" and append into it.
+       
+        ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(texture_RGBA)), ImVec2(RGBA_image.cols, RGBA_image.rows));
         ImGui::End();
 
 
+
+        //ImGui::ShowDemoWindow();
 
         ///
         // Rendering
@@ -200,7 +221,7 @@ int main(int, char**)
 
         glfwSwapBuffers(window);
     }
-
+   
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
