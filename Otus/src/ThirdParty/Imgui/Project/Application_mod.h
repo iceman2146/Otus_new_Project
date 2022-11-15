@@ -4,6 +4,7 @@
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
 
 #include "imgui.h"
+
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <stdio.h>
@@ -27,7 +28,9 @@ static void glfw_error_callback(int error, const char* description)
 {
 	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
-class Application
+//чтобы не использовать virtual смотри update или Startup
+
+template <typename T> class Application
 {
 public:
 	Application()
@@ -117,7 +120,7 @@ public:
 
        
 	};
-	virtual ~Application() {
+	 ~Application() {
         // Cleanup
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
@@ -171,8 +174,16 @@ public:
             glfwSwapBuffers(window);
 		}
 	}
-	virtual void Startup()=0;
-	virtual void Update()=0;
+	 //void Startup()=0; тепереь нне Application а FromImguiTemplate 
+	 //void Update()=0;
+    void Startup() 
+    {
+       static_cast<T*>(this)->Startup();
+    };
+    void Update() 
+    {
+        static_cast<T*>(this)->Update();
+    };
 private:
     GLFWwindow* window=nullptr;
     ImVec4 clear_color;

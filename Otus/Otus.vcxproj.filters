@@ -86,6 +86,9 @@
     <ClInclude Include="src\ThirdParty\Imgui\Project\Application_mod.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="src\ThirdParty\Imgui\Extension\Steal\imfilebrowser.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="src\ThirdParty\Imgui\libs\glfw\lib-vc2010-64\glfw3.lib" />

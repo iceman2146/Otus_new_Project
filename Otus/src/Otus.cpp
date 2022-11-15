@@ -9,16 +9,18 @@
 #include "Application_mod.h"
 #include <opencv2/opencv.hpp>
 #include "image_combine.h"
+#include <imfilebrowser.h>
 
-class Dev_app :public Application
+class Dev_app :public Application<Dev_app>
 {
 private:
     GLuint texture_rgb, texture_alpha, texture_RGBA;
     cv::Mat RGB_image, Alpha_image, RGBA_image;
+    ImGui::FileBrowser fileDialog;
 public:
     Dev_app() = default;
     ~Dev_app() = default;
-    virtual void Startup()final
+    void Startup()
     {
        RGB_image = cv::imread("C://RGB.jpg");
         cv::cvtColor(RGB_image, RGB_image, cv::COLOR_BGR2RGBA);
@@ -52,20 +54,25 @@ public:
         glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, RGBA_image.cols, RGBA_image.rows, 0, GL_RGBA, GL_UNSIGNED_BYTE, RGBA_image.data);
     }
-    virtual void Update()final {
+    void Update() {
         ImGui::Begin("RG_B", 0, ImGuiWindowFlags_MenuBar);                          // Create a window called "Hello, world!" and append into it.
         if (ImGui::BeginMenuBar())
         {
             if (ImGui::BeginMenu("File"))
             {
-                if (ImGui::MenuItem("Open..")) { /* авыа */ }
+                if (ImGui::Button("Open.."))
+                {
+                    fileDialog.Open();
+                    /* авыа */ }
+                fileDialog.Display();
                 if (ImGui::MenuItem("Save")) { /* вар */ }
                 if (ImGui::MenuItem("Close")) { /*ры */ }
                 ImGui::EndMenu();
             }
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
             ImGui::EndMenuBar();
         }
-
+        fileDialog.Display();
         ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(texture_rgb)), ImVec2(RGB_image.cols, RGB_image.rows));
         ImGui::End();
 
@@ -78,15 +85,23 @@ public:
 
         ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(texture_RGBA)), ImVec2(RGBA_image.cols, RGBA_image.rows));
         ImGui::End();
+        
+        if (fileDialog.HasSelected())
+        {
+            std::cout << "Selected filename" << fileDialog.GetSelected().string() << std::endl;
+            fileDialog.ClearSelected();
+        }
     }
 
 };
 
 int main(int, char**)
 {
-
+     
     Dev_app App;
-
+    // create a file browser instance
+    
+    std::cout << __cplusplus << std::endl;
     
       // Main loop
   
