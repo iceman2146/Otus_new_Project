@@ -1,28 +1,37 @@
-// Dear ImGui: standalone example application for GLFW + OpenGL 3, using programmable pipeline
-// (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context creation, etc.)
-// If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
-// Read online: https://github.com/ocornut/imgui/tree/master/docs
+
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "image_impl.h"
 #include <stdio.h>
+#include "time.h"
+
+#include "ImFileDialog.h"
+
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
 #endif
-#include <GLFW/glfw3.h> // Will drag system OpenGL headers
+#include <GLFW/glfw3.h> 
 
-// [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
-// To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
-// Your own project should not be affected, as you are likely to link with a newer binary of GLFW that is adequate for your version of Visual Studio.
+
 #if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
-static bool show_app_dockspace = true;
-static void glfw_error_callback(int error, const char* description)
+
+//static void glfw_error_callback(int error, const char* description)
+//{
+//    fprintf(stderr, "Glfw Error %d: %s\n", error, description);
+//}
+static void ShowDockingDisabledMessage()
 {
-    fprintf(stderr, "Glfw Error %d: %s\n", error, description);
+    ImGuiIO& io = ImGui::GetIO();
+    ImGui::Text("ERROR: Docking is not enabled! See Demo > Configuration.");
+    ImGui::Text("Set io.ConfigFlags |= ImGuiConfigFlags_DockingEnable in your code, or ");
+    ImGui::SameLine(0.0f, 0.0f);
+    if (ImGui::SmallButton("click here"))
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 }
 void ShowMYAppDockSpace(bool* p_open)
 {
@@ -96,11 +105,11 @@ void ShowMYAppDockSpace(bool* p_open)
 
     if (ImGui::BeginMenuBar())
     {
-        if (ImGui::BeginMenu("Options"))
+        if (ImGui::BeginMenu("Menu"))
         {
             // Disabling fullscreen would allow the window to be moved to the front of other windows,
             // which we can't undo at the moment without finer window depth/z control.
-            ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
+           /* ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
             ImGui::MenuItem("Padding", NULL, &opt_padding);
             ImGui::Separator();
 
@@ -112,24 +121,40 @@ void ShowMYAppDockSpace(bool* p_open)
             ImGui::Separator();
 
             if (ImGui::MenuItem("Close", NULL, false, p_open != NULL))
-                *p_open = false;
+                *p_open = false;*/
+            ImGui::MenuItem("Export", NULL, false, p_open != NULL);
+            ImGui::Separator();
+            ImGui::MenuItem("Close", NULL, false, p_open != NULL);
             ImGui::EndMenu();
         }
-        HelpMarker(
-            "When docking is enabled, you can ALWAYS dock MOST window into another! Try it now!" "\n"
-            "- Drag from window title bar or their tab to dock/undock." "\n"
-            "- Drag from window menu button (upper-left button) to undock an entire node (all windows)." "\n"
-            "- Hold SHIFT to disable docking (if io.ConfigDockingWithShift == false, default)" "\n"
-            "- Hold SHIFT to enable docking (if io.ConfigDockingWithShift == true)" "\n"
-            "This demo app has nothing to do with enabling docking!" "\n\n"
-            "This demo app only demonstrate the use of ImGui::DockSpace() which allows you to manually create a docking node _within_ another window." "\n\n"
-            "Read comments in ShowExampleAppDockSpace() for more details.");
+
 
         ImGui::EndMenuBar();
     }
 
     ImGui::End();
 }
+void ShowMYBaseTextures()
+{
+    ImGui::Begin("BaseTextures");
+
+    ImGui::End();
+    
+}
+void ShowMYOptionalTextures()
+{
+    ImGui::Begin("OptionalTextures");
+
+    ImGui::End();
+
+}
+void ShowMYApp3dView()
+{
+    ImGui::Begin("3dView");
+    ImGui::End();
+
+}
+
 int main(int, char**)
 {
     // Setup window
@@ -137,31 +162,15 @@ int main(int, char**)
     if (!glfwInit())
         return 1;
 
-    // Decide GL+GLSL versions
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-    // GL ES 2.0 + GLSL 100
-    const char* glsl_version = "#version 100";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-#elif defined(__APPLE__)
-    // GL 3.2 + GLSL 150
-    const char* glsl_version = "#version 150";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
-#else
-    // GL 3.0 + GLSL 130
+
     const char* glsl_version = "#version 130";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
-#endif
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            
+
 
     // Create window with graphics context
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Dear ImGui GLFW+OpenGL3 example", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1280, 768, "Dear ImGui GLFW+OpenGL3 example", NULL, NULL);
     if (window == NULL)
         return 1;
     glfwMakeContextCurrent(window);
@@ -172,16 +181,14 @@ int main(int, char**)
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
     //io.ConfigViewportsNoAutoMerge = true;
-    //io.ConfigViewportsNoTaskBarIcon = true;
-
+    io.ConfigViewportsNoTaskBarIcon = true;
+   
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
-    //ImGui::StyleColorsLight();
-
+    
     // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
     ImGuiStyle& style = ImGui::GetStyle();
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -209,20 +216,45 @@ int main(int, char**)
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != NULL);
+    ifd::FileDialog::Instance().CreateTexture = [](uint8_t* data, int w, int h, char fmt) -> void* {
+        GLuint tex;
+
+        glGenTextures(1, &tex);
+        glBindTexture(GL_TEXTURE_2D, tex);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        //glGenerateMipmap(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        return (void*)tex;
+    };
+    ifd::FileDialog::Instance().DeleteTexture = [](void* tex) {
+        GLuint texID = (GLuint)tex;
+        glDeleteTextures(1, &texID);
+    };
+
 
     // Our state
+    static bool show_app_dockspace = true;
     bool show_demo_window = false;
     bool show_another_window = false;
+    static bool showFileBrowser = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    Image RGB;
+    Image Alpha;
+    Image RGBA;
+    cv::Mat RGBA_Mat;
+    RGB.Read_image("C://RGB.jpg");
+    Alpha.Read_image("C://OnlyAlpha.png");
+    GetSomeImages_andMerge(RGB.GetMaterial(), Alpha.GetMaterial(), RGBA_Mat);
+    RGBA.SetMaterial(RGBA_Mat);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
     {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
         glfwPollEvents();
 
         // Start the Dear ImGui frame
@@ -230,8 +262,117 @@ int main(int, char**)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        ShowMYAppDockSpace();
+        ImGui::Begin("Control Panel");
+        if (ImGui::Button("Open file"))
+            ifd::FileDialog::Instance().Open("ShaderOpenDialog", "Open a shader", "Image file (*.png;*.jpg;*.jpeg;*.bmp;*.tga){.png,.jpg,.jpeg,.bmp,.tga},.*", true);
+        if (ImGui::Button("Open directory"))
+            ifd::FileDialog::Instance().Open("DirectoryOpenDialog", "Open a directory", "");
+        if (ImGui::Button("Save file"))
+            ifd::FileDialog::Instance().Save("ShaderSaveDialog", "Save a shader", "*.sprj {.sprj}");
+        ImGui::End();
+        if (ifd::FileDialog::Instance().IsDone("ShaderOpenDialog")) {
+            if (ifd::FileDialog::Instance().HasResult()) {
+                const std::vector<std::filesystem::path>& res = ifd::FileDialog::Instance().GetResults();
+                for (const auto& r : res)
+                  // ShaderOpenDialog supports multiselection
+                    printf("OPEN[%s]\n", r.u8string().c_str());
+               // std::cout << res.capacity();
+                RGB.Read_image(ifd::FileDialog::Instance().GetResult().u8string());
+                GetSomeImages_andMerge(RGB.GetMaterial(), Alpha.GetMaterial(), RGBA_Mat);
+                RGBA.SetMaterial(RGBA_Mat);
+            }
+            ifd::FileDialog::Instance().Close();
+        }
+        if (ifd::FileDialog::Instance().IsDone("DirectoryOpenDialog")) {
+            if (ifd::FileDialog::Instance().HasResult()) {
+                std::string res = ifd::FileDialog::Instance().GetResult().u8string();
+                printf("DIRECTORY[%s]\n", res.c_str());
+            }
+            ifd::FileDialog::Instance().Close();
+        }
+        if (ifd::FileDialog::Instance().IsDone("ShaderSaveDialog")) {
+            if (ifd::FileDialog::Instance().HasResult()) {
+                std::string res = ifd::FileDialog::Instance().GetResult().u8string();
+                printf("SAVE[%s]\n", res.c_str());
+            }
+            ifd::FileDialog::Instance().Close();
+        }
+        //!!!!
+        ShowMYAppDockSpace(&show_app_dockspace);
+        ShowMYApp3dView();
+        //ShowMYBaseTextures();
+        if (ImGui::Begin("BaseTextures", NULL, ImGuiWindowFlags_MenuBar))
+        {
+            if (ImGui::BeginMenuBar())
+            {
+                if (ImGui::BeginMenu("Options"))
+                {
+                    if (ImGui::MenuItem("Close"))
+                    {
+                    }
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMenuBar();
+            }
+
+            {
+                if(ImGui::BeginChild("item view", ImVec2(150, 0),true, ImGuiWindowFlags_ChildWindow))
+                
+                {RGB.PrintImage("RGB");
+                Alpha.PrintImage("Alpha"); }
+                
+                ImGui::EndChild();
+            }
+            ImGui::End();
+        }
+        ImGui::Begin("OptionalTextures");
+        RGBA.PrintImage("RGBA");
+        ImGui::End();
+
+        
+
+        ImGui::ShowDemoWindow();
+
+
+
+
+
+
+
+
+
+
+
+
+          
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // Rendering
         ImGui::Render();
@@ -241,10 +382,7 @@ int main(int, char**)
         glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    	
-        // Update and Render additional Platform Windows
-        // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
-        //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
             GLFWwindow* backup_current_context = glfwGetCurrentContext();

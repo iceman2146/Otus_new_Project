@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Otus.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="src\ThirdParty\Imgui\imgui.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -39,10 +36,19 @@
     <ClCompile Include="src\ThirdParty\Imgui\imgui_widgets.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\ThirdParty\Imgui\Extension\image_combine.cpp">
+    <ClCompile Include="src\Project\image_combine.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\ThirdParty\Imgui\Project\Application_mod.cpp">
+    <ClCompile Include="src\Project\Application_mod.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ThirdParty\Glad\src\glad.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MAIN.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ThirdParty\Imgui\Extension\ImFileDialog\ImFileDialog.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,13 +86,22 @@
     <ClInclude Include="src\ThirdParty\Imgui\imgui_impl_opengl3_loader.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\ThirdParty\Imgui\Extension\image_combine.h">
+    <ClInclude Include="src\Project\image_combine.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\ThirdParty\Imgui\Project\Application_mod.h">
+    <ClInclude Include="src\Project\Application_mod.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\ThirdParty\Imgui\Extension\Steal\imfilebrowser.h">
+    <ClInclude Include="src\Project\Image_impl.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ThirdParty\Glad\include\glad\glad.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ThirdParty\Imgui\Extension\ImFileDialog\ImFileDialog.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ThirdParty\Imgui\Extension\STB\stb_image.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
