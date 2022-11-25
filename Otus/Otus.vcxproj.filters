@@ -39,9 +39,6 @@
     <ClCompile Include="src\Project\image_combine.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\Project\Application_mod.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="src\ThirdParty\Glad\src\glad.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -87,9 +84,6 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\Project\image_combine.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Project\Application_mod.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\Project\Image_impl.h">
