@@ -19,7 +19,8 @@
 #if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
-
+//
+//
 static void glfw_error_callback(int error, const char* description)
 {
 	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
@@ -225,18 +226,18 @@ int main(int, char**)
 
 
 			{
-				ImGui::BeginChild("Child", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), 
-													false, ImGuiWindowFlags_AlwaysHorizontalScrollbar);
+				ImGui::BeginChild("Child", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y),
+					false, ImGuiWindowFlags_AlwaysHorizontalScrollbar);
 				if (ImGui::BeginTabBar("RGB+Alpha", ImGuiTabBarFlags_Reorderable))
 				{
 
 					if (ImGui::BeginTabItem("RGB"))
 					{
 						if (ImGui::Button("Load.."))
-							ifd::FileDialog::Instance().Open("BaseTextureOpenDialog", 
-															"Open a shader", 
-															"Image file (*.png;*.jpg;*.jpeg;*.bmp;*.tga){.png,.jpg,.jpeg,.bmp,.tga},.*", 
-															true);
+							ifd::FileDialog::Instance().Open("BaseTextureOpenDialog",
+								"Open a shader",
+								"Image file (*.png;*.jpg;*.jpeg;*.bmp;*.tga){.png,.jpg,.jpeg,.bmp,.tga},.*",
+								true);
 						ImGui::SameLine();
 
 
@@ -249,10 +250,10 @@ int main(int, char**)
 					if (ImGui::BeginTabItem("A"))
 					{
 						if (ImGui::Button("Load.."))
-							ifd::FileDialog::Instance().Open("AlphaTextureOpenDialog", 
-															"Open a shader", 
-															"Image file (*.png;*.jpg;*.jpeg;*.bmp;*.tga){.png,.jpg,.jpeg,.bmp,.tga},.*", 
-															true);
+							ifd::FileDialog::Instance().Open("AlphaTextureOpenDialog",
+								"Open a shader",
+								"Image file (*.png;*.jpg;*.jpeg;*.bmp;*.tga){.png,.jpg,.jpeg,.bmp,.tga},.*",
+								true);
 						ImGui::SameLine();
 						Alpha.PrintImage("A");
 						ImGui::EndTabItem();
@@ -298,16 +299,16 @@ int main(int, char**)
 
 
 			{
-				ImGui::BeginChild("Child", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), 
-													false, ImGuiWindowFlags_AlwaysHorizontalScrollbar);
+				ImGui::BeginChild("Child", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y),
+					false, ImGuiWindowFlags_AlwaysHorizontalScrollbar);
 				if (ImGui::BeginTabBar("Alpha", ImGuiTabBarFlags_Reorderable))
 				{
 
 					if (ImGui::BeginTabItem("Alpha"))
 					{
 						if (ImGui::Button("Save.."))
-							ifd::FileDialog::Instance().Save("RGBATextureSaveDialog", "SaveTexture", 
-															"Image file (*.png;*.jpg;*.jpeg;*.bmp;*.tga){.png,.jpg,.jpeg,.bmp,.tga},.*");
+							ifd::FileDialog::Instance().Save("RGBATextureSaveDialog", "SaveTexture",
+								"Image file (*.png;*.jpg;*.jpeg;*.bmp;*.tga){.png,.jpg,.jpeg,.bmp,.tga},.*");
 						ImGui::SameLine();
 
 
@@ -338,7 +339,6 @@ int main(int, char**)
 
 
 
-
 		ImGui::ShowDemoWindow();
 
 		// Rendering
@@ -359,6 +359,7 @@ int main(int, char**)
 		}
 
 		glfwSwapBuffers(window);
+		glfwPollEvents();
 	}
 
 	// Cleanup

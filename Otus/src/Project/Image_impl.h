@@ -37,7 +37,7 @@ public:
 void Image::Read_image(std::string pathToTexture)
 {
 	Material = cv::imread(pathToTexture);
-	std::cout<<Material.type()<<std::endl;
+	std::cout << Material.type() << std::endl;
 	cv::cvtColor(Material, Material, cv::COLOR_BGR2RGBA);
 	Update_glTexture();
 }
@@ -54,6 +54,7 @@ void Image::Update_glTexture()
 }
 void Image::SaveImage(std::string PathToSave)
 {
+	cv::cvtColor(Material, Material, cv::COLOR_RGBA2BGRA);
 	cv::imwrite(PathToSave, Material);
 
 }
