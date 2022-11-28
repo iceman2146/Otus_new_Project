@@ -6,8 +6,9 @@
 #include <GLES2/gl2.h>
 #endif
 #include <GLFW/glfw3.h>
-#include <string>;
-
+#include <string>
+#include <filesystem>
+#include <iostream>
 
 class Image
 {
@@ -17,8 +18,11 @@ private:
 	std::string path;
 	void Update_glTexture();
 	//static bool showFileBrowser = false;
+	std::string ext;
 public:
-	Image() = default;
+	Image() {
+		Material.create(512, 512, CV_8UC4);
+	}
 	~Image() = default;
 	void Read_image(std::string);
 	void PrintImage(const char*);
@@ -26,11 +30,14 @@ public:
 	void SetMaterial(cv::Mat&);
 	void SaveImage(std::string);
 
+	GLuint GetName();
 
 };
+
 void Image::Read_image(std::string pathToTexture)
 {
 	Material = cv::imread(pathToTexture);
+	std::cout<<Material.type()<<std::endl;
 	cv::cvtColor(Material, Material, cv::COLOR_BGR2RGBA);
 	Update_glTexture();
 }
@@ -57,6 +64,10 @@ void Image::PrintImage(const char* name)
 cv::Mat Image::GetMaterial()
 {
 	return Material;
+}
+GLuint Image::GetName()
+{
+	return GL_name;
 }
 void Image::SetMaterial(cv::Mat& InputMaterialToSet)
 {

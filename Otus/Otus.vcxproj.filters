@@ -42,10 +42,10 @@
     <ClCompile Include="src\ThirdParty\Glad\src\glad.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\MAIN.cpp">
+    <ClCompile Include="src\ThirdParty\Imgui\Extension\ImFileDialog\ImFileDialog.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\ThirdParty\Imgui\Extension\ImFileDialog\ImFileDialog.cpp">
+    <ClCompile Include="src\MAIN.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
